@@ -9,22 +9,41 @@
  * }
  */
 class Solution {
+    // Variable to keep track of the count of valid paths
+    var countOfPaths = 0
     fun pathSum(root: TreeNode?, targetSum: Int): Int {
-        if(root == null){
+        // Check if the root is null, return 0 if true
+        if (root == null) {
             return 0
         }
+        // Call the recursive helper function to count paths
+        countPaths(root, targetSum, 0)
 
-        return countPaths(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum)
+        // Explore paths in the left and right subtrees
+        pathSum(root.left, targetSum)
+        pathSum(root.right, targetSum)
+
+        // Return the total count of valid paths
+        return countOfPaths
     }
 
-    private fun countPaths(node: TreeNode?, targetSum: Int): Int{
-        if(node == null){
-            return 0
+    // Recursive helper function to count paths
+    private fun countPaths(root: TreeNode?, sum: Int, currentSum: Long) {
+        // Base case: If the current node is null, return without further recursion
+        if (root == null) {
+            return
+        }
+        // Calculate the updated sum along the current path
+        val updatedCurrentSum = currentSum + root.`val`
+
+        // Check if the updated sum equals the target sum
+        if (updatedCurrentSum == sum.toLong()) {
+            // Increment the count of valid paths
+            countOfPaths++
         }
 
-        val remainingSum = targetSum - node.`val`
-        val pathsFromCurrentNode = if (remainingSum == 0) 1 else 0
-
-        return pathsFromCurrentNode + countPaths(node.left, remainingSum) + countPaths(node.right, remainingSum)
-    }
+        // Recursively explore paths in the left and right subtrees
+        countPaths(root.left, sum, updatedCurrentSum)
+        countPaths(root.right, sum, updatedCurrentSum)
+    } 
 }
